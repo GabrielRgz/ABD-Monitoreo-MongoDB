@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace ABD_Monitoreo_MongoDB
 {
@@ -30,45 +31,26 @@ namespace ABD_Monitoreo_MongoDB
         private void Form1_Load(object sender, EventArgs e)
         {
             // Cadena de conexión a tu instancia de MongoDB
-            conexion = "cadena conexion";
-
+            conexion = "mongodb+srv://GabrielRgz:GabrielRgz2@clusterfree.pzhwwnw.mongodb.net/?retryWrites=true&w=majority";
             try
             {
                 // Crea el cliente de MongoDB
                 cliente = new MongoClient(conexion);
 
-                var database = cliente.GetDatabase("nombre base de datos");
+                var database = cliente.GetDatabase("Super");
 
                 // Obtiene la lista de colecciones
                 List<string> collectionNames = database.ListCollectionNames().ToList();
 
-                // Obtiene la lista de bases de datos
-                //List<string> listaBD = cliente.ListDatabaseNames().ToList();
-
                 // Muestra las bases de datos en un ListBox (u otro control de tu elección)
-                foreach (var databaseName in collectionNames)
+                foreach (var c in collectionNames)
                 {
-                    lbxColecciones.Items.Add(databaseName);
+                    lbxColecciones.Items.Add(c);
                 }
             }
             catch (Exception ex) {
                 MostrarERROR(ex);
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            /*
-            try
-            {
-                cliente = new MongoClient(conexion);
-                var result = cliente.GetDatabase("admin").RunCommand<BsonDocument>(new BsonDocument("ping", 1));
-                Console.WriteLine("Conectado correctamente a MongoDB");
-            }
-            catch (Exception ex)
-            {
-                MostrarERROR(ex);
-            }*/
         }
 
         private void lbxBasesDatos_SelectedIndexChanged(object sender, EventArgs e)
@@ -77,7 +59,7 @@ namespace ABD_Monitoreo_MongoDB
             {
 
                 //Obtiene la base de datos
-                var database = cliente.GetDatabase("nombre base de datos");
+                var database = cliente.GetDatabase("Super");
                 //Obtiene la coleccion
                 var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
 
