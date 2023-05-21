@@ -15,7 +15,7 @@ namespace ABD_Monitoreo_MongoDB
     public partial class Form1 : Form
     {
         //Variables 
-        string conexion = "cadena de conexion";
+        string conexion;
         MongoClient cliente;
 
         public Form1()
@@ -25,7 +25,26 @@ namespace ABD_Monitoreo_MongoDB
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Cadena de conexión a tu instancia de MongoDB
+            conexion = "cadena de conexion";
 
+            try
+            {
+                // Crea el cliente de MongoDB
+                var client = new MongoClient(conexion);
+
+                // Obtiene la lista de bases de datos
+                List<string> listaBD = client.ListDatabaseNames().ToList();
+
+                // Muestra las bases de datos en un ListBox (u otro control de tu elección)
+                foreach (var databaseName in listaBD)
+                {
+                    lbxBasesDatos.Items.Add(databaseName);
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
