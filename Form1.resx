@@ -117,6 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="lblTitulo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE8SURBVFhH7ZexSsNQFIbP7OLWQYfuTgV3XXwIJ6GLg4Jx
+        rC7xDXyFKLoUoQm6qFARFESwTj6Ci9Zn+M3xJjRJD+kxuTGKufDRA4f//B9kKjWPNq/naeusrWLbX4hS
+        Fp8THNBuABXO4CVKWXx/SyAY045/aA3HXwkFBnoB6/gOhSauvPwJWKA3dGnvBvUwDAU8uHQM1IKHRqCc
+        QO/JIO1UlBHg4ucPQ2GJogLJ8qTE5auZlwI5N0URAak8ZjQ2v5UJ5JUnqURAW87sj+QbU2gFvlMewxnp
+        VgqNQJHymJkSswTmToHlC2D9Vi7IgzOc5RvS7S+0n6BzLpfkwRnpVooyAo/vwNqVgefsvnKBh7fJnufs
+        vhGwKtDqA937NBt3kz3P2T1nkjdEtAKV8TsETtCmI6zWgofF6N/Jv31En6MEmXqgtSTYAAAAAElFTkSu
+        QmCC
+</value>
+  </data>
   <metadata name="lbxColecciones.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
