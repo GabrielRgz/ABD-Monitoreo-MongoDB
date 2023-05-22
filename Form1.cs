@@ -49,6 +49,7 @@ namespace ABD_Monitoreo_MongoDB
                 {
                     lbxColecciones.Items.Add(c);
                 }
+
             }
             catch (Exception ex) {
                 MostrarERROR(ex);
@@ -185,6 +186,12 @@ namespace ABD_Monitoreo_MongoDB
             var filtro = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(txbId.Text));
             collection.DeleteOne(filtro);
             setPlaceHolders();
+        }
+
+        private void lblTitulo_MouseClick(object sender, MouseEventArgs e)
+        {
+            Metricas m = new Metricas();
+            m.Show();
         }
     }
 }
