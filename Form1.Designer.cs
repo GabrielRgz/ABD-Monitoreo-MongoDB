@@ -46,12 +46,15 @@
             this.panelSeparador = new System.Windows.Forms.Panel();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
+            this.lblBD = new System.Windows.Forms.Label();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTitulo
             // 
+            this.lblTitulo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblTitulo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitulo.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblTitulo.Image = ((System.Drawing.Image)(resources.GetObject("lblTitulo.Image")));
@@ -81,7 +84,8 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.RoyalBlue;
-            this.panel1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.panel1.Controls.Add(this.lblBD);
+            this.panel1.Cursor = System.Windows.Forms.Cursors.Default;
             this.panel1.Location = new System.Drawing.Point(0, -2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(139, 34);
@@ -89,6 +93,8 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.BackgroundColor = System.Drawing.Color.GhostWhite;
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -122,6 +128,8 @@
             // 
             // lblColecciones
             // 
+            this.lblColecciones.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.lblColecciones.AutoSize = true;
             this.lblColecciones.Font = new System.Drawing.Font("Lato", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblColecciones.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -133,21 +141,26 @@
             // 
             // panel2
             // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.Color.CornflowerBlue;
             this.panel2.Controls.Add(this.lblTitulo);
             this.panel2.Location = new System.Drawing.Point(138, -2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1100, 34);
+            this.panel2.Size = new System.Drawing.Size(1012, 34);
             this.panel2.TabIndex = 6;
             // 
             // lblDescripcion
             // 
+            this.lblDescripcion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDescripcion.AutoSize = true;
             this.lblDescripcion.Font = new System.Drawing.Font("Lato", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDescripcion.Location = new System.Drawing.Point(904, 53);
+            this.lblDescripcion.Location = new System.Drawing.Point(874, 53);
             this.lblDescripcion.Name = "lblDescripcion";
-            this.lblDescripcion.Size = new System.Drawing.Size(0, 23);
+            this.lblDescripcion.Size = new System.Drawing.Size(63, 23);
             this.lblDescripcion.TabIndex = 0;
+            this.lblDescripcion.Text = "Datos:";
             this.lblDescripcion.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // btnInsertar
@@ -167,6 +180,8 @@
             // 
             // txbId
             // 
+            this.txbId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.txbId.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbId.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.txbId.Location = new System.Drawing.Point(878, 128);
@@ -176,43 +191,44 @@
             this.txbId.TabIndex = 8;
             this.txbId.Tag = "Object id";
             this.txbId.Text = "Id";
-            this.txbId.Enter += new System.EventHandler(this.txb4_Enter);
             // 
             // txb2
             // 
+            this.txb2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.txb2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txb2.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.txb2.Location = new System.Drawing.Point(878, 187);
             this.txb2.Name = "txb2";
             this.txb2.Size = new System.Drawing.Size(222, 29);
             this.txb2.TabIndex = 9;
-            this.txb2.Enter += new System.EventHandler(this.txb2_Enter);
-            this.txb2.Leave += new System.EventHandler(this.txb2_Leave);
             // 
             // txb3
             // 
+            this.txb3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.txb3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txb3.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.txb3.Location = new System.Drawing.Point(878, 245);
             this.txb3.Name = "txb3";
             this.txb3.Size = new System.Drawing.Size(222, 29);
             this.txb3.TabIndex = 10;
-            this.txb3.Enter += new System.EventHandler(this.txb3_Enter);
-            this.txb3.Leave += new System.EventHandler(this.txb3_Leave);
             // 
             // txb4
             // 
+            this.txb4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.txb4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txb4.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.txb4.Location = new System.Drawing.Point(878, 304);
             this.txb4.Name = "txb4";
             this.txb4.Size = new System.Drawing.Size(222, 29);
             this.txb4.TabIndex = 11;
-            this.txb4.Enter += new System.EventHandler(this.txb4_Enter);
-            this.txb4.Leave += new System.EventHandler(this.txb4_Leave);
             // 
             // panelSeparador
             // 
+            this.panelSeparador.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.panelSeparador.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.panelSeparador.Location = new System.Drawing.Point(844, 102);
             this.panelSeparador.Name = "panelSeparador";
@@ -232,6 +248,7 @@
             this.btnUpdate.Tag = "";
             this.btnUpdate.Text = "Actualizar";
             this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnEliminar
             // 
@@ -246,11 +263,26 @@
             this.btnEliminar.Tag = "";
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = false;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
+            // lblBD
+            // 
+            this.lblBD.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblBD.AutoSize = true;
+            this.lblBD.Font = new System.Drawing.Font("Lato", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBD.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lblBD.Location = new System.Drawing.Point(23, 7);
+            this.lblBD.Name = "lblBD";
+            this.lblBD.Size = new System.Drawing.Size(85, 23);
+            this.lblBD.TabIndex = 15;
+            this.lblBD.Text = "BD Super";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(1147, 529);
             this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.btnUpdate);
@@ -269,6 +301,8 @@
             this.Name = "Form1";
             this.Text = "MonitoringApp";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -293,6 +327,7 @@
         private System.Windows.Forms.Panel panelSeparador;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnEliminar;
+        private System.Windows.Forms.Label lblBD;
     }
 }
 

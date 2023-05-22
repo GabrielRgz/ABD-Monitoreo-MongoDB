@@ -18,6 +18,7 @@ namespace ABD_Monitoreo_MongoDB
         //Variables 
         string conexion;
         MongoClient cliente;
+        IMongoDatabase database;
 
         public Form1()
         {
@@ -28,6 +29,7 @@ namespace ABD_Monitoreo_MongoDB
             MessageBox.Show(e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+
         private void Form1_Load(object sender, EventArgs e)
         {
             // Cadena de conexión a tu instancia de MongoDB
@@ -37,7 +39,7 @@ namespace ABD_Monitoreo_MongoDB
                 // Crea el cliente de MongoDB
                 cliente = new MongoClient(conexion);
 
-                var database = cliente.GetDatabase("Super");
+               database = cliente.GetDatabase("Super");
 
                 // Obtiene la lista de colecciones
                 List<string> collectionNames = database.ListCollectionNames().ToList();
@@ -53,9 +55,8 @@ namespace ABD_Monitoreo_MongoDB
             }
         }
 
-        private void setPlaceHolders() 
+        private void setPlaceHolders()
         {
-            var database = cliente.GetDatabase("Super");
             //Obtiene la coleccion
             var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
 
@@ -82,21 +83,10 @@ namespace ABD_Monitoreo_MongoDB
             }
             dataGridView1.DataSource = dataTable;
 
-            if (lbxColecciones.SelectedItem.ToString() == "Productos")
-            {
-                lblDescripcion.Text = "Datos del Producto";
-                txb2.Text = "Nombre";
-                txb3.Text = "Precio";
-                txb4.Text = "Proveedor";
-            }
-            else
-            {
-                lblDescripcion.Text = "Datos del cliente";
-                txb2.Text = "Nombre";
-                txb3.Text = "Telefono";
-                txb4.Text = "Correo";
-            }
-            
+            txbId.Text = dataGridView1.Rows[0].Cells[0].Value.ToString();
+            txb2.Text = dataGridView1.Rows[0].Cells[1].Value.ToString();
+            txb3.Text = dataGridView1.Rows[0].Cells[2].Value.ToString();
+            txb4.Text = dataGridView1.Rows[0].Cells[3].Value.ToString();
         }
 
         private void lbxColecciones_SelectedIndexChanged(object sender, EventArgs e)
@@ -105,8 +95,6 @@ namespace ABD_Monitoreo_MongoDB
 
             try
             {
-                //Obtiene la base de datos
-                var database = cliente.GetDatabase("Super");
                 //Obtiene la coleccion
                 var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
 
@@ -151,74 +139,8 @@ namespace ABD_Monitoreo_MongoDB
             txb4.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
         }
 
-        private void txb2_Enter(object sender, EventArgs e)
-        {
-            if (txb2.Text == "Nombre")
-            {
-                txb2.Text = "";
-                txb2.ForeColor = Color.Black;
-            }
-        }
-
-        private void txb3_Enter(object sender, EventArgs e)
-        {
-            if (txb3.Text == "Precio" || txb3.Text == "Telefono")
-            {
-                txb3.Text = "";
-                txb3.ForeColor = Color.Black;
-            }
-        }
-
-        private void txb4_Enter(object sender, EventArgs e)
-        {
-            if (txb4.Text == "Proveedor" || txb4.Text == "Correo")
-            {
-                txb4.Text = "";
-                txb4.ForeColor = Color.Black;
-            }
-        }
-
-        private void txb4_Leave(object sender, EventArgs e)
-        {
-            if (txb4.Text == "" && lbxColecciones.SelectedItem.ToString() == "Productos")
-            {
-                txb4.Text = "Proveedor";
-                txb4.ForeColor = Color.Silver;
-            }
-            else if (txb4.Text == "" && lbxColecciones.SelectedItem.ToString() == "Clientes")
-            {
-                txb4.Text = "Correo";
-                txb4.ForeColor = Color.Silver;
-            }
-        }
-
-        private void txb3_Leave(object sender, EventArgs e)
-        {
-            if (txb3.Text == "" && lbxColecciones.SelectedItem.ToString() == "Productos")
-            {
-                txb3.Text = "Precio";
-                txb3.ForeColor = Color.Silver;
-
-            }
-            else if (txb3.Text == "" && lbxColecciones.SelectedItem.ToString() == "Clientes")
-            {
-                txb3.Text = "Telefono";
-                txb3.ForeColor = Color.Silver;
-            }
-        }
-
-        private void txb2_Leave(object sender, EventArgs e)
-        {
-            if (txb2.Text == "")
-            {
-                txb2.Text = "Nombre";
-                txb2.ForeColor = Color.Silver;
-            }
-        }
-
         private void btnInsertar_Click(object sender, EventArgs e)
         {
-            var database = cliente.GetDatabase("Super");
             //Obtiene la coleccion
             var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
 
@@ -233,6 +155,35 @@ namespace ABD_Monitoreo_MongoDB
                 collection.InsertOneAsync(c.ToBsonDocument());
             }
             
+            setPlaceHolders();
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            //Obtiene la coleccion
+            var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
+
+            if (lbxColecciones.SelectedItem.ToString() == "Productos")
+            {
+                var filtro = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(txbId.Text));
+                var actualizaciones = Builders<BsonDocument>.Update.Set("nombre", txb2.Text).Set("precio", Decimal128.Parse(txb3.Text)).Set("Proveedor", txb4.Text);
+                collection.UpdateOne(filtro, actualizaciones);
+            }
+            else
+            {
+                var filtro = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(txbId.Text));
+                var actualizaciones = Builders<BsonDocument>.Update.Set("nombre", txb2.Text).Set("Telefono", txb3.Text).Set("Correo", txb4.Text);
+                collection.UpdateOne(filtro, actualizaciones);
+            }
+            setPlaceHolders();
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            //Obtiene la coleccion
+            var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
+            var filtro = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(txbId.Text));
+            collection.DeleteOne(filtro);
             setPlaceHolders();
         }
     }
