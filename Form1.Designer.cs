@@ -266,7 +266,7 @@
             this.btnUpdate.Tag = "";
             this.btnUpdate.Text = "Actualizar";
             this.btnUpdate.UseVisualStyleBackColor = false;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_ClickAsync);
             // 
             // btnEliminar
             // 

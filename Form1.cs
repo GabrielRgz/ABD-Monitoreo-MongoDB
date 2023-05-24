@@ -16,8 +16,6 @@ namespace ABD_Monitoreo_MongoDB
     public partial class Form1 : Form
     {
         //Variables 
-        string conexion;
-        MongoClient cliente;
         IMongoDatabase database;
 
         public Form1()
@@ -32,11 +30,11 @@ namespace ABD_Monitoreo_MongoDB
         private void Conectar()
         {
             // Cadena de conexión a tu instancia de MongoDB
-            conexion = "mongodb+srv://GabrielRgz:GabrielRgz2@clusterfree.pzhwwnw.mongodb.net/?retryWrites=true&w=majority";
+            string conexion = "mongodb+srv://GabrielRgz:GabrielRgz2@clusterfree.pzhwwnw.mongodb.net/?retryWrites=true&w=majority";
             try
             {
                 // Crea el cliente de MongoDB
-                cliente = new MongoClient(conexion);
+                MongoClient cliente = new MongoClient(conexion);
 
                 database = cliente.GetDatabase("Super");
 
@@ -57,44 +55,62 @@ namespace ABD_Monitoreo_MongoDB
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Cargando ventanaCarga = new Cargando();
-            ventanaCarga.Show();
-            Conectar();
-            ventanaCarga.Close();
+            using (Cargando ventanaCarga = new Cargando())
+            {
+                ventanaCarga.Show();
+                Conectar();
+            }
         }
 
         private void setPlaceHolders()
         {
-            //Obtiene la coleccion
-            var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
-
-            //Agrega los elementos de la coleccion a una lista
-            var documents = collection.Find(new BsonDocument()).ToList();
-
-            var dataTable = new System.Data.DataTable();
-            foreach (var element in documents.First().Elements)
+            try
             {
-                dataTable.Columns.Add(element.Name);
-            }
+                var collectionName = lbxColecciones.SelectedItem.ToString();
 
-            // Agrega las filas al DataTable
-            foreach (var document in documents)
-            {
-                var row = dataTable.NewRow();
+                //Obtiene la coleccion
+                var collection = database.GetCollection<BsonDocument>(collectionName);
 
-                foreach (var element in document.Elements)
+                //Agrega los elementos de la coleccion a una lista
+                var documents = collection.Find(new BsonDocument()).ToList();
+
+                var dataTable = new System.Data.DataTable();
+
+                // Crea las columnas del DataTable
+                foreach (var element in documents.First().Elements)
                 {
-                    row[element.Name] = element.Value.ToString();
+                    dataTable.Columns.Add(element.Name);
                 }
 
-                dataTable.Rows.Add(row);
-            }
-            dataGridView1.DataSource = dataTable;
+                // Agrega las filas al DataTable
+                foreach (var document in documents)
+                {
+                    var row = dataTable.NewRow();
 
-            txbId.Text = dataGridView1.Rows[0].Cells[0].Value.ToString();
-            txb2.Text = dataGridView1.Rows[0].Cells[1].Value.ToString();
-            txb3.Text = dataGridView1.Rows[0].Cells[2].Value.ToString();
-            txb4.Text = dataGridView1.Rows[0].Cells[3].Value.ToString();
+                    foreach (var element in document.Elements)
+                    {
+                        row[element.Name] = element.Value.ToString();
+                    }
+
+                    dataTable.Rows.Add(row);
+                }
+
+                // Asigna el DataTable como origen de datos para el DataGridView
+                dataGridView1.DataSource = dataTable;
+
+                // Actualiza los valores de los TextBox usando la primera fila del DataGridView
+                if (dataGridView1.Rows.Count > 0)
+                {
+                    txbId.Text = dataGridView1.Rows[0].Cells[0].Value.ToString();
+                    txb2.Text = dataGridView1.Rows[0].Cells[1].Value.ToString();
+                    txb3.Text = dataGridView1.Rows[0].Cells[2].Value.ToString();
+                    txb4.Text = dataGridView1.Rows[0].Cells[3].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarERROR(ex);
+            }
         }
 
         private void lbxColecciones_SelectedIndexChanged(object sender, EventArgs e)
@@ -147,7 +163,7 @@ namespace ABD_Monitoreo_MongoDB
             txb4.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
         }
 
-        private void btnInsertar_Click(object sender, EventArgs e)
+        private async void btnInsertar_Click(object sender, EventArgs e)
         {
             //Obtiene la coleccion
             var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
@@ -155,43 +171,75 @@ namespace ABD_Monitoreo_MongoDB
             if (collection.CollectionNamespace.CollectionName == "Productos")
             {
                 Producto p = new Producto(txb2.Text, Decimal128.Parse(txb3.Text), txb4.Text);
-                collection.InsertOneAsync(p.ToBsonDocument());
+               await collection.InsertOneAsync(p.ToBsonDocument());
             }
             else
             {
                 Cliente c = new Cliente(txb2.Text, txb3.Text, txb4.Text);
-                collection.InsertOneAsync(c.ToBsonDocument());
+                await collection.InsertOneAsync(c.ToBsonDocument());
             }
             
             setPlaceHolders();
         }
 
-        private void btnUpdate_Click(object sender, EventArgs e)
+        private async void btnUpdate_ClickAsync(object sender, EventArgs e)
         {
-            //Obtiene la coleccion
-            var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
+            var collectionName = lbxColecciones.SelectedItem.ToString();
+            var collection = database.GetCollection<BsonDocument>(collectionName);
+
+            ObjectId id = ObjectId.Parse(txbId.Text);
 
             if (collection.CollectionNamespace.CollectionName == "Productos")
             {
-                var filtro = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(txbId.Text));
-                var actualizaciones = Builders<BsonDocument>.Update.Set("nombre", txb2.Text).Set("precio", Decimal128.Parse(txb3.Text)).Set("Proveedor", txb4.Text);
-                collection.UpdateOne(filtro, actualizaciones);
+                // Obtiene los valores de los TextBox
+                var nombre = txb2.Text;
+                var precio = Decimal128.Parse(txb3.Text);
+                var proveedor = txb4.Text;
+                
+
+                // Crea el filtro utilizando parámetros
+                var filtro = Builders<BsonDocument>.Filter.Eq("_id", id);
+                var actualizaciones = Builders<BsonDocument>.Update
+                    .Set("nombre", nombre)
+                    .Set("precio", precio)
+                    .Set("Proveedor", proveedor);
+
+                // Ejecuta la actualización en la base de datos
+                await collection.UpdateOneAsync(filtro, actualizaciones);
             }
             else
             {
-                var filtro = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(txbId.Text));
-                var actualizaciones = Builders<BsonDocument>.Update.Set("nombre", txb2.Text).Set("Telefono", txb3.Text).Set("Correo", txb4.Text);
-                collection.UpdateOne(filtro, actualizaciones);
+                // Obtiene los valores de los TextBox
+                var nombre = txb2.Text;
+                var telefono = txb3.Text;
+                var correo = txb4.Text;
+
+                // Crea el filtro utilizando parámetros
+                var filtro = Builders<BsonDocument>.Filter.Eq("_id", id);
+                var actualizaciones = Builders<BsonDocument>.Update
+                    .Set("nombre", nombre)
+                    .Set("Telefono", telefono)
+                    .Set("Correo", correo);
+
+                // Ejecuta la actualización en la base de datos
+                await collection.UpdateOneAsync(filtro, actualizaciones);
             }
+
             setPlaceHolders();
         }
 
-        private void btnEliminar_Click(object sender, EventArgs e)
+        private async void btnEliminar_Click(object sender, EventArgs e)
         {
-            //Obtiene la coleccion
-            var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
-            var filtro = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(txbId.Text));
-            collection.DeleteOne(filtro);
+            var collectionName = lbxColecciones.SelectedItem.ToString();
+            var collection = database.GetCollection<BsonDocument>(collectionName);
+
+            ObjectId id = ObjectId.Parse(txbId.Text);
+
+            // Crea el filtro utilizando parámetros
+            var filtro = Builders<BsonDocument>.Filter.Eq("_id", id);
+
+            // Ejecuta la eliminación en la base de datos
+            await collection.DeleteOneAsync(filtro);
             setPlaceHolders();
         }
 
