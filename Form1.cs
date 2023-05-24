@@ -29,8 +29,7 @@ namespace ABD_Monitoreo_MongoDB
             MessageBox.Show(e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void Conectar()
         {
             // Cadena de conexión a tu instancia de MongoDB
             conexion = "mongodb+srv://GabrielRgz:GabrielRgz2@clusterfree.pzhwwnw.mongodb.net/?retryWrites=true&w=majority";
@@ -39,7 +38,7 @@ namespace ABD_Monitoreo_MongoDB
                 // Crea el cliente de MongoDB
                 cliente = new MongoClient(conexion);
 
-               database = cliente.GetDatabase("Super");
+                database = cliente.GetDatabase("Super");
 
                 // Obtiene la lista de colecciones
                 List<string> collectionNames = database.ListCollectionNames().ToList();
@@ -49,11 +48,19 @@ namespace ABD_Monitoreo_MongoDB
                 {
                     lbxColecciones.Items.Add(c);
                 }
-
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 MostrarERROR(ex);
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Cargando ventanaCarga = new Cargando();
+            ventanaCarga.Show();
+            Conectar();
+            ventanaCarga.Close();
         }
 
         private void setPlaceHolders()
@@ -145,7 +152,7 @@ namespace ABD_Monitoreo_MongoDB
             //Obtiene la coleccion
             var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
 
-            if (lbxColecciones.SelectedItem.ToString() == "Productos")
+            if (collection.CollectionNamespace.CollectionName == "Productos")
             {
                 Producto p = new Producto(txb2.Text, Decimal128.Parse(txb3.Text), txb4.Text);
                 collection.InsertOneAsync(p.ToBsonDocument());
@@ -164,7 +171,7 @@ namespace ABD_Monitoreo_MongoDB
             //Obtiene la coleccion
             var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
 
-            if (lbxColecciones.SelectedItem.ToString() == "Productos")
+            if (collection.CollectionNamespace.CollectionName == "Productos")
             {
                 var filtro = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(txbId.Text));
                 var actualizaciones = Builders<BsonDocument>.Update.Set("nombre", txb2.Text).Set("precio", Decimal128.Parse(txb3.Text)).Set("Proveedor", txb4.Text);
@@ -192,6 +199,16 @@ namespace ABD_Monitoreo_MongoDB
         {
             Metricas m = new Metricas();
             m.Show();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            DialogResult cerrar = MessageBox.Show("Esta seguro que desea salir?","Confirmar cierre", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            if (cerrar == DialogResult.Yes)
+            {
+                this.Close();
+            }
+            
         }
     }
 }
