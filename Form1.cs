@@ -17,6 +17,8 @@ namespace ABD_Monitoreo_MongoDB
     {
         //Variables 
         IMongoDatabase database;
+        string collectionName;
+        IMongoCollection<BsonDocument> collection;
 
         public Form1()
         {
@@ -62,41 +64,45 @@ namespace ABD_Monitoreo_MongoDB
             }
         }
 
+        private void RellenarGrid()
+        {
+            ObtenerColeccion();
+
+            //Agrega los elementos de la coleccion a una lista
+            var documents = collection.Find(new BsonDocument()).ToList();
+
+            var dataTable = new System.Data.DataTable();
+
+            // Crea las columnas del DataTable
+            foreach (var element in documents.First().Elements)
+            {
+                dataTable.Columns.Add(element.Name);
+            }
+
+            // Agrega las filas al DataTable
+            foreach (var document in documents)
+            {
+                var row = dataTable.NewRow();
+
+                foreach (var element in document.Elements)
+                {
+                    row[element.Name] = element.Value.ToString();
+                }
+
+                dataTable.Rows.Add(row);
+            }
+
+            // Asigna el DataTable como origen de datos para el DataGridView
+            dataGridView1.DataSource = dataTable;
+        }
+
         private void setPlaceHolders()
         {
             try
             {
-                var collectionName = lbxColecciones.SelectedItem.ToString();
+                ObtenerColeccion();
 
-                //Obtiene la coleccion
-                var collection = database.GetCollection<BsonDocument>(collectionName);
-
-                //Agrega los elementos de la coleccion a una lista
-                var documents = collection.Find(new BsonDocument()).ToList();
-
-                var dataTable = new System.Data.DataTable();
-
-                // Crea las columnas del DataTable
-                foreach (var element in documents.First().Elements)
-                {
-                    dataTable.Columns.Add(element.Name);
-                }
-
-                // Agrega las filas al DataTable
-                foreach (var document in documents)
-                {
-                    var row = dataTable.NewRow();
-
-                    foreach (var element in document.Elements)
-                    {
-                        row[element.Name] = element.Value.ToString();
-                    }
-
-                    dataTable.Rows.Add(row);
-                }
-
-                // Asigna el DataTable como origen de datos para el DataGridView
-                dataGridView1.DataSource = dataTable;
+                RellenarGrid();
 
                 // Actualiza los valores de los TextBox usando la primera fila del DataGridView
                 if (dataGridView1.Rows.Count > 0)
@@ -119,35 +125,7 @@ namespace ABD_Monitoreo_MongoDB
 
             try
             {
-                //Obtiene la coleccion
-                var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
-
-                //Agrega los elementos de la coleccion a una lista
-                var documents = collection.Find(new BsonDocument()).ToList();
-
-                var dataTable = new System.Data.DataTable();
-
-                // Crea las columnas del DataTable
-                foreach (var element in documents.First().Elements)
-                {
-                    dataTable.Columns.Add(element.Name);
-                }
-
-                // Agrega las filas al DataTable
-                foreach (var document in documents)
-                {
-                    var row = dataTable.NewRow();
-
-                    foreach (var element in document.Elements)
-                    {
-                        row[element.Name] = element.Value.ToString();
-                    }
-
-                    dataTable.Rows.Add(row);
-                }
-
-                // Asigna el DataTable como origen de datos para el DataGridView
-                dataGridView1.DataSource = dataTable;
+                RellenarGrid();
             }
             catch (Exception ex)
             {
@@ -165,8 +143,7 @@ namespace ABD_Monitoreo_MongoDB
 
         private async void btnInsertar_Click(object sender, EventArgs e)
         {
-            //Obtiene la coleccion
-            var collection = database.GetCollection<BsonDocument>(lbxColecciones.SelectedItem.ToString());
+            ObtenerColeccion();
 
             if (collection.CollectionNamespace.CollectionName == "Productos")
             {
@@ -184,8 +161,7 @@ namespace ABD_Monitoreo_MongoDB
 
         private async void btnUpdate_ClickAsync(object sender, EventArgs e)
         {
-            var collectionName = lbxColecciones.SelectedItem.ToString();
-            var collection = database.GetCollection<BsonDocument>(collectionName);
+            ObtenerColeccion();
 
             ObjectId id = ObjectId.Parse(txbId.Text);
 
@@ -230,8 +206,7 @@ namespace ABD_Monitoreo_MongoDB
 
         private async void btnEliminar_Click(object sender, EventArgs e)
         {
-            var collectionName = lbxColecciones.SelectedItem.ToString();
-            var collection = database.GetCollection<BsonDocument>(collectionName);
+            ObtenerColeccion();
 
             ObjectId id = ObjectId.Parse(txbId.Text);
 
@@ -257,6 +232,12 @@ namespace ABD_Monitoreo_MongoDB
                 this.Close();
             }
             
+        }
+
+        private void ObtenerColeccion()
+        {
+            collectionName = lbxColecciones.SelectedItem.ToString();
+            collection = database.GetCollection<BsonDocument>(collectionName);
         }
     }
 }
